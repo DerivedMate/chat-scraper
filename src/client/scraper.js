@@ -6,14 +6,9 @@
  */
 const main = (uri, config) => new Promise((res, rej) => {
   /**
- * @param {WebSocket} ws 
- */
-  const make_watcher = ws =>  
-  /**
-   * @param {MutationRecord[]} mutations
-   * @param {any} _obs
+   * @param {WebSocket} ws 
    */
-  {
+  const make_watcher = ws => {
     const state = {
       last : undefined
     }

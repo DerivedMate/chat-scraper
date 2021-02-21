@@ -73,7 +73,7 @@ const main = async (cfg) => {
   })
   await page.setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0")
   await page.goto(url, {
-    waitUntil: 'networkidle2'
+    waitUntil : 'networkidle2'
   })
 
   await page.waitForSelector(cfg.target)
