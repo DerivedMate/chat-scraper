@@ -5,7 +5,6 @@ const fs = require('fs/promises')
 const { announce_pr } = require("./helpers")
 
 /**
- * 
  * @typedef Config
  * @property {String} host
  * @property {Number} port
@@ -53,7 +52,6 @@ const read_config = (path) => {
 }
 
 /**
- * 
  * @param {Config} cfg 
  */
 const main = async (cfg) => {

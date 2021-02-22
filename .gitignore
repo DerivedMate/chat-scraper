@@ -2,3 +2,5 @@
 node_modules
 lh.*
 README.html
+log/log-*.json
+test.html

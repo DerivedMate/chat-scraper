@@ -3,13 +3,36 @@ import ssl
 import pathlib
 from websockets import serve, WebSocketServerProtocol, ConnectionClosed
 
+def save_print(data, file):
+  print(f'{data}\n')
+  file.write(data)
+
 async def main(ws: WebSocketServerProtocol, path: str):
-  while True:
-    try:
-      print(f'{await ws.recv()}\n')
-    except ConnectionClosed:
-      print(f"Terminated")
-      break
+  print("Connection established")
+  stream_id = await ws.recv() 
+
+  with open(f'./log/log-{stream_id}.json', mode='a') as f:
+    f.write("[\n")
+    cnt = 0
+    
+    save_print(await ws.recv(), f)
+
+    while True:
+      try:
+        save_print(f',{await ws.recv()}', f)
+
+        cnt += 1
+        if cnt > 15:
+          cnt = 0
+          f.flush()
+
+      except ConnectionClosed:
+        print(f"Terminated")
+        break
+
+    f.write("]")
+    f.flush()
+    f.close()
   
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
