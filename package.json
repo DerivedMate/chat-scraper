@@ -8,7 +8,7 @@
     "install:python": "pip3 install websockets",
     "server": "python3 src/server/index.py",
     "client": "node src/client/index.js",
-    "clear-log": "rm ./log/log-*.json"
+    "clear-log": "rm ./log/* -r"
   },
   "author": "",
   "license": "ISC",

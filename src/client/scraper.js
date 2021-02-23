@@ -1,11 +1,17 @@
 // @ts-check
 
 /**
+ * @typedef Emoji
+ * @property {String} name
+ * @property {String} url
+ */
+
+/**
  * @typedef ChatEntry
  * @property {String} username
  * @property {String[]} badges
  * @property {String} msg
- * @property {String[]} emojis
+ * @property {Emoji[]} emojis
  * @property {Boolean} is_highlighted
  * @property {String[]} links
  */
@@ -31,7 +37,7 @@ const main = (uri, config) => new Promise((res, rej) => {
         const badges         = [...root.querySelectorAll(`.chat-badge`)].map(b => b.getAttribute("alt"))
         const username       = root.querySelector(`[data-a-target="chat-message-username"]`).textContent.trim()
         const msg            = [...root.querySelectorAll(`[data-a-target="chat-message-text"]`)].reduce((s, f) => s += f.textContent.trim(), "")
-        const emojis         = [...root.querySelectorAll(`img.chat-line__message--emote`)].map(e => e.getAttribute("alt"))
+        const emojis         = [...root.querySelectorAll(`img.chat-line__message--emote`)].map(e => ({name: e.getAttribute("alt"), url: e.getAttribute("src")}))
         const is_highlighted = !!root.querySelector(".chat-line__message-body--highlighted")
         const links          = [...root.querySelectorAll("a.link-fragment")].map(l => l.getAttribute("href"))
 

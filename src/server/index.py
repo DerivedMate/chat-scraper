@@ -2,24 +2,49 @@ import asyncio as aio
 import ssl
 import pathlib
 from websockets import serve, WebSocketServerProtocol, ConnectionClosed
+import json
+from emoji import Emoji
+from res import Response
+import os
+from helpers import safe_mkdir
 
 def save_print(data, file):
   print(f'{data}\n')
   file.write(data)
 
+def update_emojis(emojis, dir, emoji):
+  name, url = emoji.name, emoji.url
+
+  if any([e.name == name for e in emojis]):
+    return emojis
+  else:
+    emojis.add(Emoji(name, url, dir))
+    return emojis
+  
+
 async def main(ws: WebSocketServerProtocol, path: str):
   print("Connection established")
   stream_id = await ws.recv() 
+  emojis = set()
+  safe_mkdir(f'./log/{stream_id}')
 
   with open(f'./log/log-{stream_id}.json', mode='a') as f:
     f.write("[\n")
+    dir = f'./log/{stream_id}'
     cnt = 0
     
     save_print(await ws.recv(), f)
 
     while True:
       try:
-        save_print(f',{await ws.recv()}', f)
+        data_raw = await ws.recv()
+        save_print(f',{data_raw}', f)
+
+        data: Response = json.loads(data_raw, object_hook=Response.from_json)
+        for emoji in data.emojis:
+          emojis = update_emojis(emojis, dir, emoji)
+
+        print(data)
 
         cnt += 1
         if cnt > 15:
