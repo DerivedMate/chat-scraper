@@ -62,6 +62,7 @@ const main = async (cfg) => {
     args     : ["-ignore-certificate-errors"]
   })
 
+
   await setup_events(browser)
 
   const page = await browser.newPage()
@@ -70,12 +71,21 @@ const main = async (cfg) => {
     height : 1080
   })
   await page.setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0")
-  await page.goto(url, {
-    waitUntil : 'networkidle2'
-  })
+  
+  {
+    const goto = page.goto(url, {
+      waitUntil : 'networkidle2'
+    }).catch(_ => goto)
+    
+    await goto.catch(_ => goto)
+  }
 
-  await page.waitForSelector(cfg.target)
+  await page.waitForSelector(cfg.target, {
+    timeout: 100000
+  })
   await page.evaluate(scraper.main, socket_uri, cfg)
+
+  await browser.close()
 }
 
 read_config("./config.json")

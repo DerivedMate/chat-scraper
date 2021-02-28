@@ -8,13 +8,13 @@ class Emoji():
     self.path = self.__download(name, url, dir)
 
   def __download(self, name, url, dir):
-    res    = ureq.urlopen(url)
+    #res    = ureq.urlopen(url)
     f_path = path.Path(dir) / f'{name}.png'
-    dist   = open(f_path, 'wb') 
+    #dist   = open(f_path, 'wb') 
 
-    dist.write(res.read())
-    dist.flush()
-    dist.close()
+    #dist.write(res.read())
+    #dist.flush()
+    #dist.close()
 
     return f_path.absolute()
 
